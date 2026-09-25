@@ -1,152 +1,149 @@
 # 🎮 Solitaire Game
 
+A complete Klondike solitaire implementation in C++ with a colored terminal interface,
+multi-step undo built on the command pattern, and a modular class structure.
+Written for the Gigathon national programming competition.
+
 <p align="center">
-  <img src="readmepic/kadr_z_gry_bz.png" alt="Opis" />
+  <img src="readmepic/kadr_z_gry_bz.png" alt="Gameplay screenshot" />
 </p>
 
-## 📋 Spis treści
-- [Instalacja](#-instalacja)
-- [Uruchomienie](#-uruchomienie)
-- [Sterowanie](#-sterowanie)
-- [Zasady gry](#-zasady-gry)
-- [Struktura projektu](#-struktura-projektu)
-- [Dokumentacja kodu](#-dokumentacja-kodu)
+## 📋 Table of contents
+- [Installation](#️-installation)
+- [Running the game](#-running-the-game)
+- [Controls](#-controls)
+- [Rules](#-rules)
+- [Project structure](#-project-structure)
+- [Code documentation](#-code-documentation)
 
-## 🛠️ Instalacja
+## 🛠️ Installation
 
-### Wymagania
-- Kompilator C++ (np. g++)
-- System operacyjny Windows/Linux/MacOS
+### Requirements
+- A C++ compiler (e.g. g++)
+- Windows, Linux or macOS
 
-### Kroki instalacji
-1. Sklonuj repozytorium:
+### Steps
+1. Clone the repository:
    ```bash
-   git clone [URL_REPOZYTORIUM]
+   git clone https://github.com/Johnn2012-y/Solitaire.git
    ```
-2. Przejdź do katalogu projektu:
+2. Enter the project directory:
    ```bash
-   cd solitaire
+   cd Solitaire
    ```
-3. Skompiluj projekt:
-   - Na Windows: Uruchom plik `build.bat`
-   - Na Linux/MacOS: 
+3. Build:
+   - **Windows:** run `build.bat`
+   - **Linux / macOS:**
      ```bash
      g++ -o solitaire main.cpp src/*.cpp -I include
      ```
 
-## 🚀 Uruchomienie
+## 🚀 Running the game
 
-Po skompilowaniu, uruchom grę:
-- Na Windows: Uruchom plik `build.bat` (skompiluje i uruchomi grę automatycznie)
-- Na Linux/MacOS: 
+- **Windows:** run `build.bat` — it compiles and launches the game in one step
+- **Linux / macOS:**
   ```bash
   ./solitaire
   ```
 
-## 🎯 Sterowanie
+## 🎯 Controls
 
-### Podstawowe komendy
-- `d` - Pokaż nowe karty na stosie
-- `m` - Wykonaj ruch karty skąd dokąd [ilosc kart]
-- `q` - Wyjdź z gry
-- `u` - Cofnij ruch [maks 3 razy pod rząd]
-- `r` - Resetuj grę
+### Commands
+- `d` — draw new cards from the stock
+- `m` — move a card: from, to, [number of cards]
+- `u` — undo the last move (up to 3 in a row)
+- `r` — reset the game
+- `q` — quit
 
-### Ruchy kart
-Format: `m [źródło] [cel] [n opcjonalnie]`
-- Źródło/cel może być:
-  - `W` - Waste (stos odrzuconych kart)
-  - `T1-T7` - Tableau (kolumny na planszy)
-  - `F1-F4` - Foundation (stosy docelowe)
+### Moving cards
+Format: `m [source] [target] [n, optional]`
 
-Przykłady:
-- `W F1` - Przenieś kartę z waste na pierwszą foundation
-- `T1 T2` - Przenieś kartę z pierwszej kolumny na drugą
-- `F1 T3` - Przenieś kartę z pierwszej foundation na trzecią kolumnę
+Source and target can be:
+- `W` — waste (discard pile)
+- `T1`–`T7` — tableau columns
+- `F1`–`F4` — foundation piles
 
-## 🎲 Zasady gry
+Examples:
+- `m W F1` — move a card from the waste to the first foundation
+- `m T1 T2` — move a card from the first tableau column to the second
+- `m F1 T3` — move a card from the first foundation back to the third column
 
-### Cel gry
-Ułóż wszystkie karty w czterech stosach foundation (F1-F4) według kolorów, od asa do króla.
+## 🎲 Rules
 
-### Zasady
-1. **Dobieranie kart**:
-   - Kliknij `d` zobaczyć nowe karty na stosie
-   - Tylko najwyższa karta na stosie może być używana
+### Goal
+Build all four foundation piles (`F1`–`F4`) up by suit, from ace to king.
 
-2. **Układanie na Kolumnach**:
-   - Karty układamy naprzemiennie kolorami
-   - Kładziemy kartę z mniejszym numerem na tą z większym
+### How play works
+1. **Drawing cards**
+   - Press `d` to turn new cards from the stock
+   - Only the top card of the waste can be played
 
-3. **Układanie na foundation**:
-   - Zaczynamy od asa
-   - Karty muszą być tego samego koloru i znaku
-   - Kolejność: A, 2, 3, ..., K
+2. **Building the tableau**
+   - Cards are stacked in alternating colors (red on black, black on red)
+   - Each card must be one rank lower than the one it is placed on
 
-4. **Cofanie ruchów**:
-   - Użyj `u` aby cofnąć ostatni ruch
-   - Można cofać wszystkie typy ruchów
-   - cofać można maksymalnie 3 razy pod rząd
+3. **Building the foundations**
+   - Each foundation starts with an ace
+   - Cards must follow the same suit
+   - Order: A, 2, 3, …, K
 
-## 📁 Struktura projektu
+4. **Undo**
+   - Press `u` to take back the last move
+   - Every move type can be undone
+   - Up to 3 consecutive undos
+
+## 📁 Project structure
 
 ```
 solitaire/
-├── include/           # Pliki nagłówkowe
-│   ├── card/         # Definicje kart
-│   ├── game/         # Logika gry
-│   ├── ui/           # Interfejs użytkownika
-│   └── utils/        # Narzędzia pomocnicze
-├── src/              # Implementacje
-│   ├── card/         # Implementacja kart
-│   ├── game/         # Implementacja gry
-│   ├── ui/           # Implementacja UI
-│   └── utils/        # Implementacja narzędzi
-└── main.cpp          # Punkt wejścia
+├── include/          # Header files
+│   ├── card/         # Card definitions
+│   ├── game/         # Game logic
+│   ├── ui/           # User interface
+│   └── utils/        # Helpers
+├── src/              # Implementations
+│   ├── card/
+│   ├── game/
+│   ├── ui/
+│   └── utils/
+└── main.cpp          # Entry point
 ```
 
-## 📚 Dokumentacja kodu
+## 📚 Code documentation
 
-### Główne klasy
+### Main classes
 
-#### Game
-- Klasa zarządzająca stanem gry
-- Metody:
-  - `run()` - Główna pętla gry
-  - `save()` - Zapisz stan gry
-  - `load()` - Wczytaj stan gry
+#### `Game`
+Owns and drives the game state.
+- `run()` — main game loop
+- `save()` — save the current state
+- `load()` — restore a saved state
 
-#### Card
-- Reprezentacja karty
-- Atrybuty:
-  - `suit` - Kolor (♠, ♥, ♦, ♣)
-  - `rank` - Wartość (A, 2-10, J, Q, K)
+#### `Card`
+Represents a single card.
+- `suit` — ♠ ♥ ♦ ♣
+- `rank` — A, 2–10, J, Q, K
 
-#### Command
-- Wzorzec Command dla operacji w grze
-- Podklasy:
-  - `DrawCommand` - Dobieranie kart
-  - `MoveCardCommand` - Przenoszenie kart
-  - `MoveSequenceCommand` - Przenoszenie sekwencji
+#### `Command`
+Command pattern wrapping every in-game operation, which is what makes undo possible.
+- `DrawCommand` — drawing from the stock
+- `MoveCardCommand` — moving a single card
+- `MoveSequenceCommand` — moving a sequence of cards
 
-#### GameComponents
-- Komponenty gry:
-  - `Stock` - Talia
-  - `Waste` - Stos odrzuconych kart
-  - `Tableau` - Kolumny na planszy
-  - `Foundation` - Stosy docelowe
+#### `GameComponents`
+- `Stock` — the deck
+- `Waste` — discard pile
+- `Tableau` — the seven columns
+- `Foundation` — the four target piles
 
-### Interfejs użytkownika
-- Konsolowy interfejs z kolorowym wyświetlaniem
-- Obsługa wielu języków
-- Czytelne formatowanie planszy
+### User interface
+Console interface with colored card rendering and a formatted board layout.
 
-## 🎨 Style i formatowanie
-- Karty są wyświetlane w kolorach:
-  - ♠♣ - Czarny
-  - ♥♦ - Czerwony
-- Plansza jest formatowana z odpowiednimi odstępami
-- Komunikaty są wyświetlane w czytelny sposób
+## 🎨 Display
+- Suits are colored:
+  - ♠ ♣ — black
+  - ♥ ♦ — red
+- The board is laid out with fixed spacing for readability
 
-## 📝 Licencja
-Ten projekt jest dostępny na licencji MIT.
+## 📝 License
+MIT.
